@@ -1,0 +1,48 @@
+Установка metrics-server
+
+helm upgrade -i metrics-server ./metrics-server -n kube-system
+
+Проверим что он работает, должны появиться метрики ноды
+
+kubectl top node
+
+
+Создаем деплоймент
+kubectl apply -f deploy/deployment.yml -n default
+
+Создаем сервис для приложения 
+kubectl expose deployment php-apache --port 80 -n default
+
+Создаем hpa на основе metrics-server
+kubectl autoscale deployment php-apache --cpu-percent=50 --min=1 --max=5 -n default
+
+Проверяем что все работает
+kubectl get pod -n default
+
+Проверяем что HPA появился 
+kubectl get hpa -n default
+
+Запускаем "генератор"
+
+kubectl run load-generator --image=busybox  -n default -- /bin/sh -c "while true; do wget -q -O- http://php-apache; done"
+
+Наблюдаем как повышается нагрузка на наш под
+
+kubectl top pod -n default
+
+Ждем когда начнет работать Autoscaling
+
+kubectl get pod -w -n default
+
+Спустя несколько минут количество Pod должно увеличиться до 5-ти
+
+Удаляем Pod с тестовой нагрузкой выполнив команду
+kubectl delete pod load-generator -n default
+
+Проверяем нагрузку на поды
+
+kubectl top pod -n default
+
+Проверяем, как autoscaling отработает в обратную сторону
+
+kubectl get pod -w -n default
