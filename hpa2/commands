@@ -1,3 +1,6 @@
+#####
+ВАЖНО должно быть установлено все что мы делали с помощью fluxcd
+#####
 Установка адаптера
 helm install adapter prometheus-community/prometheus-adapter -n prometheus --version 4.11.0 -f values.yaml
 
