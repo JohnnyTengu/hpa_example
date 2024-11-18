@@ -1,0 +1,5 @@
+prometheus:
+  # Value is templated
+  url: http://prometheus-kube-prometheus-prometheus.prometheus.svc
+  port: 9090
+  path: ""

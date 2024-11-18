@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl-demo-deployment
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      app: curl-demo
+  template:
+    metadata:
+      labels:
+        app: curl-demo
+    spec:
+      containers:
+      - name: curl-demo-container
+        image: busybox
+        command: ["/bin/sh"]
+        args: ["-c", "while true; do wget -qO- http://demo-app-service:9090; sleep 1; done"]

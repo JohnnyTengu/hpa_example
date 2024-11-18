@@ -1,0 +1,8 @@
+Установка адаптера
+helm install adapter prometheus-community/prometheus-adapter -n prometheus --version 4.11.0 -f values.yaml
+
+Установка примера
+kubectl apply -f manifests.yml
+
+Запуск подов создающих нагрузку на приложение
+kubectl apply -f loader.yml
